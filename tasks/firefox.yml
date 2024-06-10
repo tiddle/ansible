@@ -1,0 +1,13 @@
+---
+- name: Ensure firefox is installed
+  become: true
+  hosts: all
+  connection: local
+  vars:
+    - profile_name: carlo
+  tasks:
+    - name: Install firefox
+      package:
+        name: firefox
+        state: present
+

@@ -26,3 +26,14 @@
         ansible.builtin.pip:
             name: thefuck
   
+      - name: ~/.zshrc exists
+        stat:
+          path: ~/.zshrc
+        register: zshrc_exist
+
+      - name: Init ~/.zshrc
+        become: false
+        when: zshrc_exist is failed
+        template:
+          src: .zshrc.j2
+          dest: ~/.zshrc

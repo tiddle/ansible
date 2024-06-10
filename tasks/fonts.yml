@@ -8,12 +8,12 @@
           path: "{{ lookup('env', 'HOME') }}/.fonts"
           state: directory
 
-    - name: Hack exists
+    - name: Hack fonts exists
       shell: "ls {{ lookup('env', 'HOME') }}/.fonts/Hack*Nerd*Font*Complete*"
       register: hack_exists
       ignore_errors: yes
 
-    - name: Download Hack
+    - name: Download Hack fonts
       when: hack_exists is failed
       ansible.builtin.unarchive:
           src: https://github.com/ryanoasis/nerd-fonts/releases/download/v2.1.0/Hack.zip

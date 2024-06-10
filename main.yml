@@ -2,13 +2,16 @@
 - name: Run all
   hosts: all
   connection: local
+
 - name: Rust
   import_playbook: ./tasks/rust.yml
 - name: Programs
   import_playbook: ./tasks/programs.yml
-- name: Fronts
+- name: Fonts
   import_playbook: ./tasks/fonts.yml
 - name: Cargo
   import_playbook: ./tasks/cargo.yml
 - name: Shell
-  import_playbook: ./shell/shell.yml
+  import_playbook: ./tasks/shell/shell.yml
+- name: Firefox 
+  import_playbook: ./tasks/firefox.yml

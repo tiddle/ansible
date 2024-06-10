@@ -1,0 +1,7 @@
+---
+  FirefoxPlugins:
+    - 'ublock-origin'
+    - 'bitwarden'
+    - 'darkreader'
+    - 'google-container'
+    - 'facebook-container'
