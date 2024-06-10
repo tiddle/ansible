@@ -1,0 +1,12 @@
+---
+- name: Create ~/.config/alacritty directory
+  become: false
+  file:
+      path: ~/.config/alacritty
+      state: directory
+
+- name: Generate alacritty config files
+  become: false
+  template:
+    src: alacritty.yml.j2
+    dest: ~/.config/alacritty/alacritty.yml

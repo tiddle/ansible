@@ -1,0 +1,28 @@
+
+---
+- name: Install and configure shell
+# Some stuff in Cargo.yml
+  hosts: all
+  connection: local
+  become: true
+  vars:
+      the_user: '{{ ansible_user_id }}'
+  tasks:
+      - name: install software
+        package:
+            name:
+                - tmux
+                - vim
+                - zsh
+                - alacritty
+
+      - name: Ensure zsh is the default shell
+        become: true
+        user:
+            name: '{{ the_user }}'
+            shell: 'chsh -s /bin/zsh {{ the_user }}'
+
+      - name: Install thefuck python package
+        ansible.builtin.pip:
+            name: thefuck
+  
