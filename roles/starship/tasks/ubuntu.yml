@@ -1,0 +1,11 @@
+---
+- name: starship exists
+  shell: 'starship -V'
+  register: starship_exist
+  ignore_errors: yes
+
+- name: Install starship
+  when: starship_exist is failed
+  community.general.cargo:
+      name: starship
+      locked: true

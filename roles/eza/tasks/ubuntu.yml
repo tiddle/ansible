@@ -1,0 +1,12 @@
+---
+- name: eza exists
+  shell: 'eza -v'
+  register: eza_exists
+  ignore_errors: yes
+
+- name: Install eza (long task)
+  when: eza_exists is failed
+  become: false
+  community.general.cargo:
+      name: eza
+
