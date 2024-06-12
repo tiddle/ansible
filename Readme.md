@@ -4,3 +4,6 @@
 1. `ansible-galaxy install -r requirements/common.yml`
 1. `sudo whoami`
 1. `ansible-playbook main.yml`
+
+## Run single role
+`ansible-playbook main.yml --tags zsh,codium,firefox`

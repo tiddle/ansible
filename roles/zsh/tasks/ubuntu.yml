@@ -14,7 +14,7 @@
 
 - name: ~/.zshrc exists
   stat:
-    path: ~/.zshrc
+    path: "{{ ansible_env.HOME }}/.zshrc"
   register: zshrc_exist
 
 - name: Init ~/.zshrc
@@ -22,4 +22,4 @@
   when: zshrc_exist is failed
   template:
     src: .zshrc.j2
-    dest: ~/.zshrc
+    dest: "{{ ansible_env.HOME }}/.zshrc"

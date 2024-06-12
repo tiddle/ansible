@@ -3,3 +3,8 @@
   package:
       name:
           - tmux
+- name: Generate tmux config files
+  become: false
+  template:
+      src: .tmux.conf.j2
+      dest: "{{ ansible_env.HOME }}/.tmux.conf"
