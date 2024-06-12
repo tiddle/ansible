@@ -1,0 +1,4 @@
+---
+- name: Install thefuck python package
+  ansible.builtin.pip:
+      name: thefuck

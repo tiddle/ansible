@@ -1,4 +1,10 @@
 ---
+- name: Install Alacritty
+  become: true
+  package:
+      name:
+          - alacritty
+
 - name: Create ~/.config/alacritty directory
   become: false
   file:
@@ -7,6 +13,6 @@
 
 - name: Generate alacritty config files
   become: false
-  template:
-    src: alacritty.yml.j2
-    dest: ~/.config/alacritty/alacritty.yml
+  copy:
+      src: alacritty.yml
+      dest: ~/.config/alacritty/alacritty.yml

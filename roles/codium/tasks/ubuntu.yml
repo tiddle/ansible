@@ -1,0 +1,11 @@
+---
+- name: Add an Apt signing key for vscodium
+  apt_key:
+      url: https://gitlab.com/paulcarroty/vscodium-deb-rpm-repo/raw/master/pub.gpg
+      state: present
+- name: 'Add repo'
+  apt_repository:
+      repo: 'deb https://gitlab.com/paulcarroty/vscodium-deb-rpm-repo/raw/repos/debs/ vscodium main'
+- name: 'Install codium'
+  apt:
+      name: codium
