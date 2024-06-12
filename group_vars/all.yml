@@ -10,3 +10,4 @@ default_roles:
   - firefox
   - codium
   - nvm
+  - git
