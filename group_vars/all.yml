@@ -13,5 +13,6 @@ default_roles:
     - git
     - lazygit
     - fzf
+    - eza
     - tldr
     - zoxide

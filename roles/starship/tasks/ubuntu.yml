@@ -12,16 +12,22 @@
 
 - name: Check if startship alias is set
   lineinfile:
-    state: absent
-    path: "{{ ansible_user_dir }}/.zshrc"
-    regexp: "starship"
+      state: absent
+      path: '{{ ansible_user_dir }}/.zshrc'
+      regexp: 'starship'
   check_mode: true
   changed_when: false # This just makes things look prettier in the logs
   register: check
 
 - name: Define starship if undefined
   lineinfile:
-    state: present
-    path: "{{ ansible_user_dir }}/.zshrc"
-    line: "eval \"$(starship init zsh)\""
+      state: present
+      path: '{{ ansible_user_dir }}/.zshrc'
+      line: 'eval "$(starship init zsh)"'
   when: check.found == 0
+
+- name: Update "starship" Rust package its latest version
+  when: starship_exist.stdout != ''
+  community.general.cargo:
+      name: starship
+      state: latest
