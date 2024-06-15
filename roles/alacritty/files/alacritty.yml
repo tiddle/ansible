@@ -3,7 +3,7 @@ window:
     x: 8
     y: 8
   decoration: full
-  opacity: none
+  opacity: 1
 # Colors (Srcery)
 colors:
   # Default colors
