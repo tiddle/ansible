@@ -9,3 +9,19 @@
 - name: Install thefuck python package
   ansible.builtin.pip:
       name: thefuck
+
+- name: Check if thefuck alias is set
+  lineinfile:
+    state: absent
+    path: "{{ ansible_user_dir }}/.zshrc"
+    regexp: "thefuck"
+  check_mode: true
+  changed_when: false # This just makes things look prettier in the logs
+  register: check
+
+- name: Define thefuck if undefined
+  lineinfile:
+    state: present
+    path: "{{ ansible_user_dir }}/.zshrc"
+    line: "eval $(thefuck --alias)"
+  when: check.found == 0

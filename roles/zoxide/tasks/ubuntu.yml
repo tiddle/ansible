@@ -1,29 +1,28 @@
 ---
-- name: eza exists
-  shell: 'eza -v'
-  register: eza_exists
+- name: zoxide exists
+  shell: 'zoxide --version'
+  register: zoxide_exists
   ignore_errors: yes
 
-- name: Install eza (long task)
-  when: eza_exists is failed
+- name: Install zoxide (long task)
+  when: zoxide_exists is failed
   become: false
   community.general.cargo:
-      name: eza
+      name: zoxide
 
-- name: Check if eza alias is set
+- name: Check if zoxide alias is set
   lineinfile:
     state: absent
     path: "{{ ansible_user_dir }}/.zshrc"
-    regexp: "ls=eza"
+    regexp: "zoxide init zsh"
   check_mode: true
   changed_when: false # This just makes things look prettier in the logs
   register: check
 
-- name: Define eza if undefined
+- name: Define zoxide if undefined
   lineinfile:
     state: present
     path: "{{ ansible_user_dir }}/.zshrc"
-    line: "alias ls=eza\nalias ll=eza -la"
+    line: "eval \"$(zoxide init zsh)\""
   when: check.found == 0
-
 
