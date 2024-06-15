@@ -9,7 +9,7 @@
   become: true
   user:
       name: '{{ ansible_user_id }}'
-      shell: 'chsh -s /bin/zsh {{ ansible_user_id }}'
+      shell: 'chsh -s /usr/bin/zsh {{ ansible_user_id }}'
 
 
 - name: ~/.zshrc exists

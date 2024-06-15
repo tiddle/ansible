@@ -1,0 +1,29 @@
+---
+- name: "fzf version"
+  ansible.builtin.uri:
+    url: https://api.github.com/repos/junegunn/fzf/releases/latest
+  register: fzf_latest_version_json
+  changed_when: false
+
+- name: "latest fzf release"
+  ansible.builtin.set_fact:
+    fzf_latest_release: "{{ fzf_latest_version_json.json.tag_name }}"
+
+- name: "register latest fzf release"
+  ansible.builtin.set_fact:
+    fzf_latest_version: "{{ fzf_latest_release.stdout | default('') }}"
+
+- name: "fzf show latest debug"
+  ansible.builtin.debug:
+    var: fzf_latest_release
+
+- name: git clone fzf
+  ansible.builtin.git:
+    repo: "https://github.com/junegunn/fzf.git"
+    dest: "{{ ansible_user_dir }}/.fzf"
+    version: "{{ fzf_latest_release }}"
+
+- name: Install fzf
+  shell: "{{ ansible_user_dir }}/.fzf/install"
+  args:
+    executable: /bin/bash
