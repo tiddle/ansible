@@ -1,0 +1,17 @@
+---
+- name: Check if homebrew is installed
+  shell: command -v brew
+  register: homebrew_exists
+  ignore_errors: yes
+
+- name: Curl installer
+  when: homebrew_exists is failed
+  get_url:
+    url: https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh
+    dest: /tmp/homebrew.sh
+    mode: '0755'
+    force: 'yes'
+
+- name: Install Homebrew
+  when: homebrew_exists is failed
+  shell: /tmp/homebrew.sh

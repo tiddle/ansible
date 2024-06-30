@@ -1,0 +1,23 @@
+---
+- name: Install bat
+  become: true
+  package:
+    name: bat
+    state: present
+
+
+- name: Check if alias is set
+  lineinfile:
+      state: absent
+      path: '{{ ansible_user_dir }}/.zshrc'
+      regexp: 'alias cat=batcat'
+  check_mode: true
+  changed_when: false # This just makes things look prettier in the logs
+  register: check
+
+- name: Define if undefined
+  lineinfile:
+      state: present
+      path: '{{ ansible_user_dir }}/.zshrc'
+      line: 'alias cat=batcat'
+  when: check.found == 0
