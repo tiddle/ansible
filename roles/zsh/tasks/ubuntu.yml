@@ -9,8 +9,8 @@
   become: true
   user:
       name: '{{ ansible_user_id }}'
-      shell: 'chsh -s /usr/bin/zsh {{ ansible_user_id }}'
-
+      shell: /usr/bin/zsh
+      state: present
 
 - name: ~/.zshrc exists
   stat:
