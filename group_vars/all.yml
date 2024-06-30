@@ -18,3 +18,5 @@ default_roles:
     - tldr
     - zoxide
     - bat
+    - nvim
+    - lazyvim

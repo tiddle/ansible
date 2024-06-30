@@ -1,0 +1,39 @@
+---
+- name: Get apt packages
+  become: true
+  package:
+    name:
+      - ripgrep
+      - fd-find
+
+- name: Check for backup config folder
+  stat:
+    path: "{{ ansible_user_dir }}/.config/nvim.bak"
+  register: nvimconfigbak_exists
+
+- name: Delete backup config nvim
+  when: nvimconfigbak_exists.stat.exists
+  ansible.builtin.file:
+    path: "{{ ansible_user_dir }}/.config/nvim.bak"
+    state: absent
+
+
+- name: Check for config folder
+  stat:
+    path: "{{ ansible_user_dir }}/.config/nvim"
+  register: nvimconfig_exists
+
+- name: Move config nvim
+  when: nvimconfig_exists.stat.exists
+  command: "mv {{ ansible_user_dir }}/.config/nvim {{ ansible_user_dir }}/.config/nvim.bak"
+
+- name: git clone lazygit
+  ansible.builtin.git:
+    repo: "https://github.com/LazyVim/starter.git"
+    dest: "{{ ansible_user_dir }}/.config/nvim"
+
+- name: Remove git folder
+  ansible.builtin.file:
+    path: "{{ ansible_user_dir }}/.config/nvim/.git"
+    state: absent
+

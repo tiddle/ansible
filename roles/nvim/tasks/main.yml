@@ -1,0 +1,23 @@
+---
+- name: Install
+  community.general.homebrew:
+    name: nvim
+    state: present
+
+- name: Check if nvim alias is set
+  lineinfile:
+    state: absent
+    path: "{{ ansible_user_dir }}/.zshrc"
+    regexp: "alias vim=nvim"
+  check_mode: true
+  changed_when: false
+  register: check
+
+- name: Define nvim if undefined
+  lineinfile:
+    state: present
+    path: "{{ ansible_user_dir }}/.zshrc"
+    line: "alias vim=nvim"
+  when: check.found == 0
+
+
