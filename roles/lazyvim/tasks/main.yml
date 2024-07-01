@@ -6,6 +6,11 @@
       - ripgrep
       - fd-find
 
+- name: Check for lazyvim folder
+  stat:
+    path: "{{ ansible_user_dir }}/.config/nvim/lazyvim"
+  register: lazyvim_exists 
+
 - name: Check for backup config folder
   stat:
     path: "{{ ansible_user_dir }}/.config/nvim.bak"
@@ -17,22 +22,25 @@
     path: "{{ ansible_user_dir }}/.config/nvim.bak"
     state: absent
 
-
 - name: Check for config folder
   stat:
     path: "{{ ansible_user_dir }}/.config/nvim"
   register: nvimconfig_exists
 
 - name: Move config nvim
-  when: nvimconfig_exists.stat.exists
+  when: 
+    - nvimconfig_exists.stat.exists
+    - lazyvim_exists.stat.isdir is not defined
   command: "mv {{ ansible_user_dir }}/.config/nvim {{ ansible_user_dir }}/.config/nvim.bak"
 
 - name: git clone lazygit
+  when: lazyvim_exists.stat.isdir is not defined
   ansible.builtin.git:
     repo: "https://github.com/LazyVim/starter.git"
     dest: "{{ ansible_user_dir }}/.config/nvim"
 
 - name: Remove git folder
+  when: lazyvim_exists.stat.isdir is not defined
   ansible.builtin.file:
     path: "{{ ansible_user_dir }}/.config/nvim/.git"
     state: absent
