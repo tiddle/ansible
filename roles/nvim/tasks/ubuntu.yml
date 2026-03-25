@@ -1,5 +1,5 @@
 ---
-# AIDEV-NOTE: Uses neovim-ppa/unstable for 0.10+ (required by NvChad)
+# AIDEV-NOTE: Uses neovim-ppa/unstable which tracks latest builds (0.11+, required by NvChad)
 - name: Install software-properties-common
   become: true
   ansible.builtin.apt:
