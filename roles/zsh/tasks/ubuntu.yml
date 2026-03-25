@@ -1,10 +1,13 @@
 ---
 # AIDEV-NOTE: Fixed 'when: zshrc_exist is failed' to 'when: not zshrc_exist.stat.exists'
 # Added tags for all tasks
+# Switched from generic package module to ansible.builtin.apt with become: true
 - name: install software
-  package:
-      name:
-          - zsh
+  become: true
+  ansible.builtin.apt:
+    name: zsh
+    state: present
+    update_cache: true
   tags: [zsh]
 
 - name: Ensure zsh is the default shell

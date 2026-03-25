@@ -1,17 +1,19 @@
 ---
-# AIDEV-NOTE: Added become: true to package install; added tags
+# AIDEV-NOTE: Switched from generic package module to ansible.builtin.apt with become: true
 - name: install system software
   become: true
-  package:
-      name:
-          - python3-dev
-          - python3-pip
-          - python3-setuptools
-          - pipx
+  ansible.builtin.apt:
+    name:
+      - python3-dev
+      - python3-pip
+      - python3-setuptools
+      - pipx
+    state: present
+    update_cache: true
   tags: [tldr]
 
 - name: Install tldr python package
-  become: true
   community.general.pipx:
-      name: tldr
+    name: tldr
+    state: present
   tags: [tldr]

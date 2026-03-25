@@ -1,31 +1,9 @@
 ---
-# AIDEV-NOTE: Removed spurious .stdout access on fzf_latest_release (it's already a string from set_fact)
-- name: "fzf version"
-  ansible.builtin.uri:
-    url: https://api.github.com/repos/junegunn/fzf/releases/latest
-  register: fzf_latest_version_json
-  changed_when: false
-  tags: [fzf]
-
-- name: "latest fzf release"
-  ansible.builtin.set_fact:
-    fzf_latest_release: "{{ fzf_latest_version_json.json.tag_name }}"
-  tags: [fzf]
-
-- name: "fzf show latest debug"
-  ansible.builtin.debug:
-    var: fzf_latest_release
-  tags: [fzf]
-
-- name: git clone fzf
-  ansible.builtin.git:
-    repo: "https://github.com/junegunn/fzf.git"
-    dest: "{{ ansible_env.HOME }}/.fzf"
-    version: "{{ fzf_latest_release }}"
-  tags: [fzf]
-
+# AIDEV-NOTE: Replaced git-clone + shell script install with ansible.builtin.apt (fzf available in apt)
 - name: Install fzf
-  shell: "{{ ansible_env.HOME }}/.fzf/install --all --no-update-rc"
-  args:
-    executable: /bin/bash
+  become: true
+  ansible.builtin.apt:
+    name: fzf
+    state: present
+    update_cache: true
   tags: [fzf]

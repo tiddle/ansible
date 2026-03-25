@@ -1,17 +1,22 @@
 ---
-# AIDEV-NOTE: Fixed ignore_errors to ansible_check_mode; added tags; standardised paths
-- name: Check if thefuck is installed
-  shell: command -v thefuck
-  register: thefuck_exists
-  ignore_errors: "{{ ansible_check_mode }}"
-  changed_when: false
+# AIDEV-NOTE: Replaced homebrew install with ansible.builtin.apt (thefuck available via pipx on Ubuntu)
+# pipx is the recommended install method; apt provides python3-pip and pipx
+- name: Install pipx dependencies
+  become: true
+  ansible.builtin.apt:
+    name:
+      - python3-dev
+      - python3-pip
+      - python3-setuptools
+      - pipx
+    state: present
+    update_cache: true
   tags: [thefuck]
 
-- name: Install thefuck homebrew
-  when: thefuck_exists is failed
-  community.general.homebrew:
-      name: thefuck
-      state: present
+- name: Install thefuck via pipx
+  community.general.pipx:
+    name: thefuck
+    state: present
   tags: [thefuck]
 
 - name: Check if thefuck alias is set

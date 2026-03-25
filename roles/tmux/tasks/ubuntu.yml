@@ -1,9 +1,11 @@
 ---
-# AIDEV-NOTE: Added tags
+# AIDEV-NOTE: Switched from generic package module to ansible.builtin.apt with become: true
 - name: install tmux
-  package:
-      name:
-          - tmux
+  become: true
+  ansible.builtin.apt:
+    name: tmux
+    state: present
+    update_cache: true
   tags: [tmux]
 
 - name: Generate tmux config files

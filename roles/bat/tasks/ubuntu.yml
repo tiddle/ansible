@@ -1,10 +1,26 @@
 ---
-# AIDEV-NOTE: Added tags to all tasks
+# AIDEV-NOTE: Switched from generic package module to ansible.builtin.apt
+# On Ubuntu the binary is 'batcat', so a ~/.local/bin/bat symlink is created for convenience
 - name: Install bat
   become: true
-  package:
+  ansible.builtin.apt:
     name: bat
     state: present
+    update_cache: true
+  tags: [bat]
+
+- name: Ensure ~/.local/bin exists
+  ansible.builtin.file:
+    path: "{{ ansible_env.HOME }}/.local/bin"
+    state: directory
+    mode: '0755'
+  tags: [bat]
+
+- name: Symlink batcat to bat
+  ansible.builtin.file:
+    src: /usr/bin/batcat
+    dest: "{{ ansible_env.HOME }}/.local/bin/bat"
+    state: link
   tags: [bat]
 
 - name: Check if alias is set
