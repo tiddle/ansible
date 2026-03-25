@@ -1,0 +1,42 @@
+---
+# AIDEV-NOTE: Uses neovim-ppa/unstable for 0.10+ (required by NvChad)
+- name: Install software-properties-common
+  become: true
+  ansible.builtin.apt:
+    name: software-properties-common
+    state: present
+    update_cache: true
+  tags: [nvim]
+
+- name: Add neovim PPA
+  become: true
+  ansible.builtin.apt_repository:
+    repo: ppa:neovim-ppa/unstable
+    state: present
+  tags: [nvim]
+
+- name: Install neovim
+  become: true
+  ansible.builtin.apt:
+    name: neovim
+    state: present
+    update_cache: true
+  tags: [nvim]
+
+- name: Check if vim alias is set
+  ansible.builtin.lineinfile:
+    state: absent
+    path: "{{ ansible_env.HOME }}/.zshrc"
+    regexp: "alias vim=nvim"
+  check_mode: true
+  changed_when: false
+  register: vim_alias_check
+  tags: [nvim]
+
+- name: Set vim alias to nvim
+  ansible.builtin.lineinfile:
+    state: present
+    path: "{{ ansible_env.HOME }}/.zshrc"
+    line: "alias vim=nvim"
+  when: vim_alias_check.found == 0
+  tags: [nvim]
