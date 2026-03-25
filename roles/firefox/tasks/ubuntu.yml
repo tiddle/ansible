@@ -1,7 +1,8 @@
 ---
+# AIDEV-NOTE: Added tags
 - name: Install firefox
   become: true
   package:
     name: firefox
     state: present
-
+  tags: [firefox]

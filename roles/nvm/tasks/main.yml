@@ -1,25 +1,36 @@
 ---
+# AIDEV-NOTE: Removed spurious .stdout access on nvm_latest_release (it's already a string from set_fact)
+# Replaced 'curl | bash' pipe with get_url + shell pattern
 - name: "NVM | Download Latest Version JSON"
   ansible.builtin.uri:
     url: https://api.github.com/repos/nvm-sh/nvm/releases/latest
   register: nvm_latest_version_json
   changed_when: false
+  tags: [nvm]
 
 - name: "NVM | Registering NVM Latest Release"
   ansible.builtin.set_fact:
     nvm_latest_release: "{{ nvm_latest_version_json.json.tag_name }}"
-
-- name: "NVM | Registering NVM Latest Version"
-  ansible.builtin.set_fact:
-    nvm_latest_version: "{{ nvm_latest_release.stdout | default('') }}"
+  tags: [nvm]
 
 - name: NVM | Show nvm_latest_release debug
   ansible.builtin.debug:
     var: nvm_latest_release
+  tags: [nvm]
+
+- name: "NVM | Download install script"
+  ansible.builtin.get_url:
+    url: "https://raw.githubusercontent.com/nvm-sh/nvm/{{ nvm_latest_release }}/install.sh"
+    dest: /tmp/nvm-install.sh
+    mode: '0755'
+    force: true
+  args:
+    creates: "{{ ansible_env.HOME }}/.nvm/nvm.sh"
+  tags: [nvm]
 
 - name: Install nvm
-  shell: >
-    set -o pipefail && curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/{{ nvm_latest_release }}/install.sh | bash
+  shell: /tmp/nvm-install.sh
   args:
     creates: "{{ ansible_env.HOME }}/.nvm/nvm.sh"
     executable: /bin/bash
+  tags: [nvm]

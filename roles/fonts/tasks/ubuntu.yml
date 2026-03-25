@@ -1,17 +1,26 @@
 ---
+# AIDEV-NOTE: Replaced lookup('env', 'HOME') with ansible_env.HOME for consistency
+# Added set -o pipefail + executable: /bin/bash to shell tasks with pipes
+# Used nerd_fonts_version variable instead of hardcoded v2.1.0
 - name: ensure fonts directory
   file:
-      path: "{{ lookup('env', 'HOME') }}/.fonts"
+      path: "{{ ansible_env.HOME }}/.fonts"
       state: directory
+  tags: [fonts]
 
 - name: Hack fonts exists
-  shell: "ls {{ lookup('env', 'HOME') }}/.fonts/Hack*Nerd*Font*Complete*"
+  shell:
+    cmd: "set -o pipefail && ls {{ ansible_env.HOME }}/.fonts/Hack*Nerd*Font*Complete*"
+    executable: /bin/bash
   register: hack_exists
-  ignore_errors: yes
+  ignore_errors: "{{ ansible_check_mode }}"
+  changed_when: false
+  tags: [fonts]
 
 - name: Download Hack fonts
   when: hack_exists is failed
   ansible.builtin.unarchive:
-      src: https://github.com/ryanoasis/nerd-fonts/releases/download/v2.1.0/Hack.zip
-      dest: "{{ lookup('env', 'HOME') }}/.fonts/"
+      src: "https://github.com/ryanoasis/nerd-fonts/releases/download/{{ nerd_fonts_version }}/Hack.zip"
+      dest: "{{ ansible_env.HOME }}/.fonts/"
       remote_src: yes
+  tags: [fonts]

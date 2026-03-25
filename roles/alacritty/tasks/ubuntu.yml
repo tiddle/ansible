@@ -1,18 +1,22 @@
 ---
+# AIDEV-NOTE: Replaced ~/  with ansible_env.HOME for consistency; added tags
 - name: Install Alacritty
   become: true
   package:
       name:
           - alacritty
+  tags: [alacritty]
 
 - name: Create ~/.config/alacritty directory
   become: false
   file:
-      path: ~/.config/alacritty
+      path: "{{ ansible_env.HOME }}/.config/alacritty"
       state: directory
+  tags: [alacritty]
 
 - name: Generate alacritty config files
   become: false
   copy:
       src: alacritty.yml
-      dest: ~/.config/alacritty/alacritty.yml
+      dest: "{{ ansible_env.HOME }}/.config/alacritty/alacritty.yml"
+  tags: [alacritty]

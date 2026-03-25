@@ -1,33 +1,40 @@
 ---
+# AIDEV-NOTE: Fixed ignore_errors to ansible_check_mode; added tags; standardised paths
 - name: starship exists
   shell: 'starship -V'
   register: starship_exist
-  ignore_errors: yes
+  ignore_errors: "{{ ansible_check_mode }}"
+  changed_when: false
+  tags: [starship]
 
 - name: Install starship
   when: starship_exist is failed
   community.general.cargo:
       name: starship
       locked: true
+  tags: [starship]
 
-- name: Check if startship alias is set
+- name: Check if starship alias is set
   lineinfile:
       state: absent
-      path: '{{ ansible_user_dir }}/.zshrc'
+      path: '{{ ansible_env.HOME }}/.zshrc'
       regexp: 'starship'
   check_mode: true
   changed_when: false # This just makes things look prettier in the logs
   register: check
+  tags: [starship]
 
 - name: Define starship if undefined
   lineinfile:
       state: present
-      path: '{{ ansible_user_dir }}/.zshrc'
+      path: '{{ ansible_env.HOME }}/.zshrc'
       line: 'eval "$(starship init zsh)"'
   when: check.found == 0
+  tags: [starship]
 
 - name: Update "starship" Rust package its latest version
   when: starship_exist.stdout != ''
   community.general.cargo:
       name: starship
       state: latest
+  tags: [starship]

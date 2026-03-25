@@ -1,33 +1,40 @@
 ---
+# AIDEV-NOTE: Fixed ignore_errors to ansible_check_mode; added tags; standardised paths
 - name: eza exists
   shell: 'eza -v'
   register: eza_exists
-  ignore_errors: yes
+  ignore_errors: "{{ ansible_check_mode }}"
+  changed_when: false
+  tags: [eza]
 
 - name: Install eza (long task)
   when: eza_exists is failed
   become: false
   community.general.cargo:
       name: eza
+  tags: [eza]
 
 - name: Check if eza alias is set
   lineinfile:
     state: absent
-    path: "{{ ansible_user_dir }}/.zshrc"
+    path: "{{ ansible_env.HOME }}/.zshrc"
     regexp: "ls=eza"
   check_mode: true
   changed_when: false # This just makes things look prettier in the logs
   register: check
+  tags: [eza]
 
 - name: Define eza if undefined
   lineinfile:
     state: present
-    path: "{{ ansible_user_dir }}/.zshrc"
+    path: "{{ ansible_env.HOME }}/.zshrc"
     line: "alias ls=eza\nalias ll='eza -la'"
   when: check.found == 0
+  tags: [eza]
 
 - name: Update "eza" Rust package its latest version
   when: eza_exists.stdout != ''
   community.general.cargo:
-    name: eza 
+    name: eza
     state: latest
+  tags: [eza]

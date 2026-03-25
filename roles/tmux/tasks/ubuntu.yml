@@ -1,10 +1,14 @@
 ---
-- name: install tmux 
+# AIDEV-NOTE: Added tags
+- name: install tmux
   package:
       name:
           - tmux
+  tags: [tmux]
+
 - name: Generate tmux config files
   become: false
   template:
       src: .tmux.conf.j2
       dest: "{{ ansible_env.HOME }}/.tmux.conf"
+  tags: [tmux]

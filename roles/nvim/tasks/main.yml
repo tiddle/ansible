@@ -1,23 +1,25 @@
 ---
+# AIDEV-NOTE: Added tags; standardised path to ansible_env.HOME
 - name: Install
   community.general.homebrew:
     name: nvim
     state: present
+  tags: [nvim]
 
 - name: Check if nvim alias is set
   lineinfile:
     state: absent
-    path: "{{ ansible_user_dir }}/.zshrc"
+    path: "{{ ansible_env.HOME }}/.zshrc"
     regexp: "alias vim=nvim"
   check_mode: true
   changed_when: false
   register: check
+  tags: [nvim]
 
 - name: Define nvim if undefined
   lineinfile:
     state: present
-    path: "{{ ansible_user_dir }}/.zshrc"
+    path: "{{ ansible_env.HOME }}/.zshrc"
     line: "alias vim=nvim"
   when: check.found == 0
-
-
+  tags: [nvim]

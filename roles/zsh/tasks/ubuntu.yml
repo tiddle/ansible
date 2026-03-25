@@ -1,9 +1,11 @@
-
 ---
+# AIDEV-NOTE: Fixed 'when: zshrc_exist is failed' to 'when: not zshrc_exist.stat.exists'
+# Added tags for all tasks
 - name: install software
   package:
       name:
           - zsh
+  tags: [zsh]
 
 - name: Ensure zsh is the default shell
   become: true
@@ -11,15 +13,18 @@
       name: '{{ ansible_user_id }}'
       shell: /usr/bin/zsh
       state: present
+  tags: [zsh]
 
 - name: ~/.zshrc exists
   stat:
     path: "{{ ansible_env.HOME }}/.zshrc"
   register: zshrc_exist
+  tags: [zsh]
 
 - name: Init ~/.zshrc
   become: false
-  when: zshrc_exist is failed
+  when: not zshrc_exist.stat.exists
   template:
     src: .zshrc.j2
     dest: "{{ ansible_env.HOME }}/.zshrc"
+  tags: [zsh]

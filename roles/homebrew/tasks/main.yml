@@ -1,8 +1,11 @@
 ---
+# AIDEV-NOTE: Fixed ignore_errors to use ansible_check_mode; added executable arg; added tags
 - name: Check if homebrew is installed
   shell: command -v brew
   register: homebrew_exists
-  ignore_errors: yes
+  ignore_errors: "{{ ansible_check_mode }}"
+  changed_when: false
+  tags: [homebrew]
 
 - name: Curl installer
   when: homebrew_exists is failed
@@ -11,7 +14,11 @@
     dest: /tmp/homebrew.sh
     mode: '0755'
     force: 'yes'
+  tags: [homebrew]
 
 - name: Install Homebrew
   when: homebrew_exists is failed
   shell: /tmp/homebrew.sh
+  args:
+    executable: /bin/bash
+  tags: [homebrew]

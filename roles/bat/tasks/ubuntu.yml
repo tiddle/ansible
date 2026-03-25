@@ -1,23 +1,26 @@
 ---
+# AIDEV-NOTE: Added tags to all tasks
 - name: Install bat
   become: true
   package:
     name: bat
     state: present
-
+  tags: [bat]
 
 - name: Check if alias is set
   lineinfile:
       state: absent
-      path: '{{ ansible_user_dir }}/.zshrc'
+      path: '{{ ansible_env.HOME }}/.zshrc'
       regexp: 'alias cat=batcat'
   check_mode: true
   changed_when: false # This just makes things look prettier in the logs
   register: check
+  tags: [bat]
 
 - name: Define if undefined
   lineinfile:
       state: present
-      path: '{{ ansible_user_dir }}/.zshrc'
+      path: '{{ ansible_env.HOME }}/.zshrc'
       line: 'alias cat=batcat'
   when: check.found == 0
+  tags: [bat]

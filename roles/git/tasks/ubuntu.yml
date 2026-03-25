@@ -1,7 +1,8 @@
 ---
+# AIDEV-NOTE: Added tags
 - name: Install git
   become: true
   package:
     name: git
     state: present
-
+  tags: [git]
