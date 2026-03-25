@@ -3,40 +3,41 @@
 # Added OS-conditional dependency install: fd-find (Debian) vs fd (Arch)
 - name: Install lazyvim dependencies (Debian/Ubuntu)
   become: true
-  package:
+  ansible.builtin.apt:
     name:
       - ripgrep
       - fd-find
+    state: present
   when: ansible_os_family == 'Debian'
   tags: [lazyvim]
 
 - name: Install lazyvim dependencies (Arch Linux)
-  import_tasks: arch.yml
+  ansible.builtin.import_tasks: arch.yml
   when: ansible_os_family == 'Archlinux'
   tags: [lazyvim]
 
 - name: Check for lazyvim folder
-  stat:
-    path: "{{ ansible_user_dir }}/.config/nvim/lazyvim"
+  ansible.builtin.stat:
+    path: "{{ ansible_env.HOME }}/.config/nvim/lazyvim"
   register: lazyvim_exists
   tags: [lazyvim]
 
 - name: Check for backup config folder
-  stat:
-    path: "{{ ansible_user_dir }}/.config/nvim.bak"
+  ansible.builtin.stat:
+    path: "{{ ansible_env.HOME }}/.config/nvim.bak"
   register: nvimconfigbak_exists
   tags: [lazyvim]
 
 - name: Delete backup config nvim
   when: nvimconfigbak_exists.stat.exists
   ansible.builtin.file:
-    path: "{{ ansible_user_dir }}/.config/nvim.bak"
+    path: "{{ ansible_env.HOME }}/.config/nvim.bak"
     state: absent
   tags: [lazyvim]
 
 - name: Check for config folder
-  stat:
-    path: "{{ ansible_user_dir }}/.config/nvim"
+  ansible.builtin.stat:
+    path: "{{ ansible_env.HOME }}/.config/nvim"
   register: nvimconfig_exists
   tags: [lazyvim]
 
@@ -44,19 +45,19 @@
   when:
     - nvimconfig_exists.stat.exists
     - lazyvim_exists.stat.isdir is not defined
-  command: "mv {{ ansible_user_dir }}/.config/nvim {{ ansible_user_dir }}/.config/nvim.bak"
+  ansible.builtin.command: "mv {{ ansible_env.HOME }}/.config/nvim {{ ansible_env.HOME }}/.config/nvim.bak"
   tags: [lazyvim]
 
 - name: git clone lazyvim
   when: lazyvim_exists.stat.isdir is not defined
   ansible.builtin.git:
     repo: "https://github.com/LazyVim/starter.git"
-    dest: "{{ ansible_user_dir }}/.config/nvim"
+    dest: "{{ ansible_env.HOME }}/.config/nvim"
   tags: [lazyvim]
 
 - name: Remove git folder
   when: lazyvim_exists.stat.isdir is not defined
   ansible.builtin.file:
-    path: "{{ ansible_user_dir }}/.config/nvim/.git"
+    path: "{{ ansible_env.HOME }}/.config/nvim/.git"
     state: absent
   tags: [lazyvim]

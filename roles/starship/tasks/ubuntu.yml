@@ -1,7 +1,7 @@
 ---
 # AIDEV-NOTE: Fixed ignore_errors to ansible_check_mode; added tags; standardised paths
 - name: starship exists
-  shell: 'starship -V'
+  ansible.builtin.shell: 'starship -V'
   register: starship_exist
   ignore_errors: "{{ ansible_check_mode }}"
   changed_when: false
@@ -15,7 +15,7 @@
   tags: [starship]
 
 - name: Check if starship alias is set
-  lineinfile:
+  ansible.builtin.lineinfile:
       state: absent
       path: '{{ ansible_env.HOME }}/.zshrc'
       regexp: 'starship'
@@ -25,7 +25,7 @@
   tags: [starship]
 
 - name: Define starship if undefined
-  lineinfile:
+  ansible.builtin.lineinfile:
       state: present
       path: '{{ ansible_env.HOME }}/.zshrc'
       line: 'eval "$(starship init zsh)"'

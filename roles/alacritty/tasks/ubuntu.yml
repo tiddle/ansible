@@ -2,21 +2,22 @@
 # AIDEV-NOTE: Replaced ~/  with ansible_env.HOME for consistency; added tags
 - name: Install Alacritty
   become: true
-  package:
+  ansible.builtin.apt:
       name:
           - alacritty
+      state: present
   tags: [alacritty]
 
 - name: Create ~/.config/alacritty directory
   become: false
-  file:
+  ansible.builtin.file:
       path: "{{ ansible_env.HOME }}/.config/alacritty"
       state: directory
   tags: [alacritty]
 
 - name: Generate alacritty config files
   become: false
-  copy:
+  ansible.builtin.copy:
       src: alacritty.yml
       dest: "{{ ansible_env.HOME }}/.config/alacritty/alacritty.yml"
   tags: [alacritty]

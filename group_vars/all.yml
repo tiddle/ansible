@@ -1,7 +1,6 @@
 ---
 default_roles:
     - system
-    - homebrew
     - yay
     - alacritty
     - rust

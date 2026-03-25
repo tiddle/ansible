@@ -2,12 +2,12 @@
 # AIDEV-NOTE: Fixed ignore_errors to use ansible_check_mode; added tags
 # Arch Linux uses pacman rustup (arch.yml); other systems use the rustup.rs script installer.
 - name: Run Arch Linux Tasks
-  import_tasks: arch.yml
+  ansible.builtin.import_tasks: arch.yml
   when: ansible_os_family == 'Archlinux'
   tags: [rust]
 
 - name: check if cargo is installed
-  shell: command -v cargo
+  ansible.builtin.shell: command -v cargo
   register: cargo_exists
   ignore_errors: "{{ ansible_check_mode }}"
   changed_when: false
@@ -16,7 +16,7 @@
 
 - name: Download Installer
   when: ansible_os_family != 'Archlinux' and cargo_exists is failed
-  get_url:
+  ansible.builtin.get_url:
     url: https://sh.rustup.rs
     dest: /tmp/sh.rustup.rs
     mode: '0755'
@@ -25,7 +25,7 @@
 
 - name: install rust/cargo
   when: ansible_os_family != 'Archlinux' and cargo_exists is failed
-  shell: /tmp/sh.rustup.rs -y
+  ansible.builtin.shell: /tmp/sh.rustup.rs -y
   args:
     executable: /bin/bash
   tags: [rust]

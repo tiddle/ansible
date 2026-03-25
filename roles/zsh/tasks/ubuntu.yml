@@ -12,14 +12,14 @@
 
 - name: Ensure zsh is the default shell
   become: true
-  user:
+  ansible.builtin.user:
       name: '{{ ansible_user_id }}'
       shell: /usr/bin/zsh
       state: present
   tags: [zsh]
 
 - name: ~/.zshrc exists
-  stat:
+  ansible.builtin.stat:
     path: "{{ ansible_env.HOME }}/.zshrc"
   register: zshrc_exist
   tags: [zsh]
@@ -27,7 +27,7 @@
 - name: Init ~/.zshrc
   become: false
   when: not zshrc_exist.stat.exists
-  template:
+  ansible.builtin.template:
     src: .zshrc.j2
     dest: "{{ ansible_env.HOME }}/.zshrc"
   tags: [zsh]

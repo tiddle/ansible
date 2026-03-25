@@ -1,34 +1,8 @@
 ---
-# AIDEV-NOTE: OS-conditional install — Ubuntu uses apt+PPA, macOS uses Homebrew, Arch uses pacman
+# AIDEV-NOTE: OS-conditional install — Ubuntu uses apt+PPA, Arch uses pacman. macOS support removed.
 - name: Ubuntu install
   ansible.builtin.include_tasks: ubuntu.yml
   when: ansible_os_family == "Debian"
-  tags: [nvim]
-
-- name: macOS install
-  community.general.homebrew:
-    name: nvim
-    state: present
-  when: ansible_os_family == "Darwin"
-  tags: [nvim]
-
-- name: Check if vim alias is set (macOS)
-  ansible.builtin.lineinfile:
-    state: absent
-    path: "{{ ansible_env.HOME }}/.zshrc"
-    regexp: "alias vim=nvim"
-  check_mode: true
-  changed_when: false
-  register: vim_alias_check_macos
-  when: ansible_os_family == "Darwin"
-  tags: [nvim]
-
-- name: Set vim alias to nvim (macOS)
-  ansible.builtin.lineinfile:
-    state: present
-    path: "{{ ansible_env.HOME }}/.zshrc"
-    line: "alias vim=nvim"
-  when: ansible_os_family == "Darwin" and vim_alias_check_macos.found == 0
   tags: [nvim]
 
 - name: Arch Linux install

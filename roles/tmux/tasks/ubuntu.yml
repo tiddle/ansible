@@ -10,7 +10,7 @@
 
 - name: Generate tmux config files
   become: false
-  template:
+  ansible.builtin.template:
       src: .tmux.conf.j2
       dest: "{{ ansible_env.HOME }}/.tmux.conf"
   tags: [tmux]

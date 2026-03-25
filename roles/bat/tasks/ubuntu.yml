@@ -24,7 +24,7 @@
   tags: [bat]
 
 - name: Check if alias is set
-  lineinfile:
+  ansible.builtin.lineinfile:
       state: absent
       path: '{{ ansible_env.HOME }}/.zshrc'
       regexp: 'alias cat=batcat'
@@ -34,7 +34,7 @@
   tags: [bat]
 
 - name: Define if undefined
-  lineinfile:
+  ansible.builtin.lineinfile:
       state: present
       path: '{{ ansible_env.HOME }}/.zshrc'
       line: 'alias cat=batcat'

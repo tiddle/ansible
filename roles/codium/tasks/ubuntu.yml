@@ -19,6 +19,7 @@
 
 - name: 'Install codium'
   become: true
-  apt:
+  ansible.builtin.apt:
       name: codium
+      state: present
   tags: [codium]

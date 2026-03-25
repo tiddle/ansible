@@ -1,7 +1,7 @@
 ---
 # AIDEV-NOTE: Added tags to all tasks; shell tasks already use set -o pipefail and executable: /bin/bash
 - name: Check installed version
-  shell:
+  ansible.builtin.shell:
     cmd: |
       if [[ -f {{ binary_dir }}/lazygit ]]; then
         {{ binary_dir }}/lazygit -v | grep -Po 'version=([0-9.]+)' | cut -d '=' -f 2 2>&1
@@ -19,10 +19,11 @@
     cache_valid_time: "{{ apt_cache_valid_time }}"
     name:
       - curl
+    state: present
   tags: [lazygit]
 
 - name: Get latest lazygit version  # noqa command-instead-of-module
-  shell: |
+  ansible.builtin.shell: |
       set -o pipefail && curl -Ls "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | grep -Po '"tag_name": "v\K[0-9\.]+'
   args:
     executable: /bin/bash
@@ -64,7 +65,7 @@
         creates: "{{ tempdir.path }}/lazygit"
     - name: Create bin dir
       become: false
-      file:
+      ansible.builtin.file:
           path: "{{ binary_dir }}"
           state: directory
     - name: Copy

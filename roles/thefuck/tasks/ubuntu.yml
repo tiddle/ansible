@@ -20,7 +20,7 @@
   tags: [thefuck]
 
 - name: Check if thefuck alias is set
-  lineinfile:
+  ansible.builtin.lineinfile:
     state: absent
     path: "{{ ansible_env.HOME }}/.zshrc"
     regexp: "thefuck"
@@ -30,7 +30,7 @@
   tags: [thefuck]
 
 - name: Define thefuck if undefined
-  lineinfile:
+  ansible.builtin.lineinfile:
     state: present
     path: "{{ ansible_env.HOME }}/.zshrc"
     line: "eval $(thefuck --alias)"

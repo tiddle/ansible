@@ -9,7 +9,7 @@
   tags: [zoxide]
 
 - name: Check if zoxide alias is set
-  lineinfile:
+  ansible.builtin.lineinfile:
     state: absent
     path: "{{ ansible_env.HOME }}/.zshrc"
     regexp: "zoxide init zsh"
@@ -19,7 +19,7 @@
   tags: [zoxide]
 
 - name: Define zoxide if undefined
-  lineinfile:
+  ansible.builtin.lineinfile:
     state: present
     path: "{{ ansible_env.HOME }}/.zshrc"
     line: "eval \"$(zoxide init zsh)\""

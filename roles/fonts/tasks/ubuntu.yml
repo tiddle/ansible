@@ -3,13 +3,13 @@
 # Added set -o pipefail + executable: /bin/bash to shell tasks with pipes
 # Used nerd_fonts_version variable instead of hardcoded v2.1.0
 - name: ensure fonts directory
-  file:
+  ansible.builtin.file:
       path: "{{ ansible_env.HOME }}/.fonts"
       state: directory
   tags: [fonts]
 
 - name: Hack fonts exists
-  shell:
+  ansible.builtin.shell:
     cmd: "set -o pipefail && ls {{ ansible_env.HOME }}/.fonts/Hack*Nerd*Font*Complete*"
     executable: /bin/bash
   register: hack_exists

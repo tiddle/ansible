@@ -2,7 +2,7 @@
 # AIDEV-NOTE: Added tags
 - name: Install git
   become: true
-  package:
+  ansible.builtin.apt:
     name: git
     state: present
   tags: [git]

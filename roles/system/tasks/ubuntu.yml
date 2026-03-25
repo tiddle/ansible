@@ -2,7 +2,7 @@
 # AIDEV-NOTE: Replaced ~/ with ansible_env.HOME for consistency; added tags
 - name: Update and upgrade apt packages
   become: true
-  apt:
+  ansible.builtin.apt:
       upgrade: 'yes'
       update_cache: 'yes'
       cache_valid_time: 86400 #One day
@@ -10,16 +10,17 @@
 
 - name: install system software
   become: true
-  package:
+  ansible.builtin.apt:
       name:
           - python3-dev
           - python3-pip
           - python3-setuptools
+      state: present
   tags: [system]
 
 - name: Create ~/Documents/workspace directory
   become: false
-  file:
+  ansible.builtin.file:
       path: "{{ ansible_env.HOME }}/Documents/workspace"
       state: directory
   tags: [system]

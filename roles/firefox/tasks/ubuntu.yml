@@ -2,7 +2,7 @@
 # AIDEV-NOTE: Added tags
 - name: Install firefox
   become: true
-  package:
+  ansible.builtin.apt:
     name: firefox
     state: present
   tags: [firefox]

@@ -3,7 +3,7 @@
 # Replaced 'curl | bash' pipe with get_url + shell pattern
 # Added Arch Linux support via AUR (arch.yml); script-based install only runs on non-Arch systems.
 - name: Run Arch Linux Tasks
-  import_tasks: arch.yml
+  ansible.builtin.import_tasks: arch.yml
   when: ansible_os_family == 'Archlinux'
   tags: [nvm]
 
@@ -39,7 +39,7 @@
   tags: [nvm]
 
 - name: Install nvm
-  shell: /tmp/nvm-install.sh
+  ansible.builtin.shell: /tmp/nvm-install.sh
   args:
     creates: "{{ ansible_env.HOME }}/.nvm/nvm.sh"
     executable: /bin/bash
