@@ -1,0 +1,7 @@
+---
+- name: Install bottom
+  become: true
+  community.general.pacman:
+    name: bottom
+    state: present
+  tags: [bottom]

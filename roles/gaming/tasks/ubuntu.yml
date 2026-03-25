@@ -1,0 +1,51 @@
+---
+# AIDEV-NOTE: i386 arch is required for Steam on Ubuntu; changed_when: false avoids false-changed status
+- name: Add i386 architecture for Steam
+  become: true
+  ansible.builtin.command: dpkg --add-architecture i386
+  changed_when: false
+  tags: [gaming]
+
+- name: Install steam
+  become: true
+  ansible.builtin.apt:
+    name: steam
+    state: present
+    update_cache: true
+  tags: [gaming]
+
+- name: Install gamemode
+  become: true
+  ansible.builtin.apt:
+    name: gamemode
+    state: present
+  tags: [gaming]
+
+- name: Install mangohud
+  become: true
+  ansible.builtin.apt:
+    name: mangohud
+    state: present
+  tags: [gaming]
+
+# AIDEV-NOTE: bottles is available from Ubuntu 23.04+; flatpak version is recommended for broader compatibility
+- name: Install bottles
+  become: true
+  ansible.builtin.apt:
+    name: bottles
+    state: present
+  tags: [gaming]
+
+# AIDEV-NOTE: discord is not in standard apt repos; download .deb directly from Discord CDN
+- name: Download discord .deb
+  ansible.builtin.get_url:
+    url: "https://discord.com/api/download?platform=linux&format=deb"
+    dest: /tmp/discord.deb
+    mode: '0644'
+  tags: [gaming]
+
+- name: Install discord .deb
+  become: true
+  ansible.builtin.apt:
+    deb: /tmp/discord.deb
+  tags: [gaming]

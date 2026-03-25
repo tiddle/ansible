@@ -1,0 +1,33 @@
+---
+- name: Install kitty
+  become: true
+  ansible.builtin.apt:
+    name: kitty
+    state: present
+    update_cache: true
+  tags: [kitty]
+
+- name: Create ~/.config/kitty directory
+  become: false
+  ansible.builtin.file:
+    path: "{{ ansible_env.HOME }}/.config/kitty"
+    state: directory
+    mode: '0755'
+  tags: [kitty]
+
+- name: Copy kitty.conf
+  become: false
+  ansible.builtin.copy:
+    src: kitty.conf
+    dest: "{{ ansible_env.HOME }}/.config/kitty/kitty.conf"
+  tags: [kitty]
+
+- name: Set TERMINAL env var in ~/.zshrc
+  become: false
+  ansible.builtin.lineinfile:
+    path: "{{ ansible_env.HOME }}/.zshrc"
+    line: 'export TERMINAL=kitty'
+    regexp: '^export TERMINAL='
+    state: present
+    create: false
+  tags: [kitty]

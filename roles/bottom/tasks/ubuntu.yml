@@ -1,0 +1,22 @@
+---
+# AIDEV-NOTE: bottom (btm) is not in standard Ubuntu apt repos; install via .deb from GitHub releases
+- name: Check if btm is already installed
+  ansible.builtin.stat:
+    path: /usr/local/bin/btm
+  register: btm_installed
+  tags: [bottom]
+
+- name: Download bottom .deb from GitHub releases
+  ansible.builtin.get_url:
+    url: "https://github.com/ClementTsang/bottom/releases/latest/download/bottom_amd64.deb"
+    dest: /tmp/bottom.deb
+    mode: '0644'
+  when: not btm_installed.stat.exists
+  tags: [bottom]
+
+- name: Install bottom .deb
+  become: true
+  ansible.builtin.apt:
+    deb: /tmp/bottom.deb
+  when: not btm_installed.stat.exists
+  tags: [bottom]

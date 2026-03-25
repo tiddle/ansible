@@ -1,0 +1,16 @@
+---
+# AIDEV-NOTE: After this role runs, the user must run `tailscale up` manually to authenticate
+- name: Install tailscale
+  become: true
+  community.general.pacman:
+    name: tailscale
+    state: present
+  tags: [tailscale]
+
+- name: Enable and start tailscaled service
+  become: true
+  ansible.builtin.systemd:
+    name: tailscaled
+    enabled: true
+    state: started
+  tags: [tailscale]

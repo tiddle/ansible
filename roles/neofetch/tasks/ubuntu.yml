@@ -1,0 +1,8 @@
+---
+- name: Install neofetch
+  become: true
+  ansible.builtin.apt:
+    name: neofetch
+    state: present
+    update_cache: true
+  tags: [neofetch]

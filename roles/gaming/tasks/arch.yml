@@ -1,0 +1,35 @@
+---
+- name: Install steam
+  become: true
+  community.general.pacman:
+    name: steam
+    state: present
+  tags: [gaming]
+
+- name: Install gamemode
+  become: true
+  community.general.pacman:
+    name: gamemode
+    state: present
+  tags: [gaming]
+
+- name: Install mangohud
+  become: true
+  community.general.pacman:
+    name: mangohud
+    state: present
+  tags: [gaming]
+
+- name: Install bottles
+  become: true
+  community.general.pacman:
+    name: bottles
+    state: present
+  tags: [gaming]
+
+- name: Install discord
+  become: true
+  community.general.pacman:
+    name: discord
+    state: present
+  tags: [gaming]

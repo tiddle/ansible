@@ -1,8 +1,9 @@
 ---
 default_roles:
     - system
+    - neofetch
     - yay
-    - alacritty
+    - kitty
     - rust
     - zsh
     - fonts
@@ -15,9 +16,13 @@ default_roles:
     - git
     - lazygit
     - fzf
+    - bottom
+    - ripgrep
     - eza
     - tldr
     - zoxide
     - bat
     - nvim
     - lazyvim
+    - gaming
+    - tailscale
