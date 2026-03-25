@@ -1,0 +1,8 @@
+---
+# AIDEV-NOTE: On Arch the binary is 'bat' (not 'batcat'), so no symlink is needed.
+- name: Install bat
+  become: true
+  community.general.pacman:
+    name: bat
+    state: present
+  tags: [bat]

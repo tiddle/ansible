@@ -1,0 +1,8 @@
+---
+# AIDEV-NOTE: VSCodium is not in official Arch repos; install vscodium-bin from AUR using yay.
+- name: Install vscodium-bin from AUR
+  ansible.builtin.command: yay -S --noconfirm vscodium-bin
+  become: false
+  args:
+    creates: /usr/bin/codium
+  tags: [codium]

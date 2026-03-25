@@ -1,0 +1,26 @@
+---
+# AIDEV-NOTE: On Arch, neovim is in the official repos — no PPA needed. Also sets vim=nvim alias.
+- name: Install neovim
+  become: true
+  community.general.pacman:
+    name: neovim
+    state: present
+  tags: [nvim]
+
+- name: Check if vim alias is set
+  ansible.builtin.lineinfile:
+    state: absent
+    path: "{{ ansible_env.HOME }}/.zshrc"
+    regexp: "alias vim=nvim"
+  check_mode: true
+  changed_when: false
+  register: vim_alias_check_arch
+  tags: [nvim]
+
+- name: Set vim alias to nvim
+  ansible.builtin.lineinfile:
+    state: present
+    path: "{{ ansible_env.HOME }}/.zshrc"
+    line: "alias vim=nvim"
+  when: vim_alias_check_arch.found == 0
+  tags: [nvim]

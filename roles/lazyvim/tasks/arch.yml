@@ -1,0 +1,10 @@
+---
+# AIDEV-NOTE: lazyvim dependencies on Arch — ripgrep and fd are in official repos (fd not fd-find).
+- name: Install lazyvim dependencies
+  become: true
+  community.general.pacman:
+    name:
+      - ripgrep
+      - fd
+    state: present
+  tags: [lazyvim]

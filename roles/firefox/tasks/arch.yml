@@ -1,0 +1,8 @@
+---
+# AIDEV-NOTE: firefox is available in the Arch official repos via pacman
+- name: Install firefox
+  become: true
+  community.general.pacman:
+    name: firefox
+    state: present
+  tags: [firefox]

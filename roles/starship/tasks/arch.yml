@@ -1,0 +1,8 @@
+---
+# AIDEV-NOTE: starship is available in the Arch official repos via pacman
+- name: Install starship
+  become: true
+  community.general.pacman:
+    name: starship
+    state: present
+  tags: [starship]

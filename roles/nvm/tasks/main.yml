@@ -1,21 +1,30 @@
 ---
 # AIDEV-NOTE: Removed spurious .stdout access on nvm_latest_release (it's already a string from set_fact)
 # Replaced 'curl | bash' pipe with get_url + shell pattern
+# Added Arch Linux support via AUR (arch.yml); script-based install only runs on non-Arch systems.
+- name: Run Arch Linux Tasks
+  import_tasks: arch.yml
+  when: ansible_os_family == 'Archlinux'
+  tags: [nvm]
+
 - name: "NVM | Download Latest Version JSON"
   ansible.builtin.uri:
     url: https://api.github.com/repos/nvm-sh/nvm/releases/latest
   register: nvm_latest_version_json
   changed_when: false
+  when: ansible_os_family != 'Archlinux'
   tags: [nvm]
 
 - name: "NVM | Registering NVM Latest Release"
   ansible.builtin.set_fact:
     nvm_latest_release: "{{ nvm_latest_version_json.json.tag_name }}"
+  when: ansible_os_family != 'Archlinux'
   tags: [nvm]
 
 - name: NVM | Show nvm_latest_release debug
   ansible.builtin.debug:
     var: nvm_latest_release
+  when: ansible_os_family != 'Archlinux'
   tags: [nvm]
 
 - name: "NVM | Download install script"
@@ -26,6 +35,7 @@
     force: true
   args:
     creates: "{{ ansible_env.HOME }}/.nvm/nvm.sh"
+  when: ansible_os_family != 'Archlinux'
   tags: [nvm]
 
 - name: Install nvm
@@ -33,4 +43,5 @@
   args:
     creates: "{{ ansible_env.HOME }}/.nvm/nvm.sh"
     executable: /bin/bash
+  when: ansible_os_family != 'Archlinux'
   tags: [nvm]

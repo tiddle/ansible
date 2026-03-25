@@ -1,0 +1,47 @@
+---
+# AIDEV-NOTE: yay AUR helper role — installs base-devel+git via pacman then builds yay from AUR.
+# makepkg must NOT run as root, so become: false is used for the build steps.
+# This role is a no-op on non-Arch systems.
+- name: Install base-devel and git (required for AUR builds)
+  become: true
+  community.general.pacman:
+    name:
+      - base-devel
+      - git
+    state: present
+  when: ansible_os_family == 'Archlinux'
+  tags: [yay]
+
+- name: Check if yay is already installed
+  ansible.builtin.command: which yay
+  register: yay_installed
+  ignore_errors: true
+  changed_when: false
+  when: ansible_os_family == 'Archlinux'
+  tags: [yay]
+
+- name: Clone yay AUR repository
+  ansible.builtin.git:
+    repo: https://aur.archlinux.org/yay.git
+    dest: /tmp/yay
+    force: true
+  become: false
+  when: ansible_os_family == 'Archlinux' and yay_installed is failed
+  tags: [yay]
+
+- name: Build and install yay with makepkg
+  ansible.builtin.command: makepkg -si --noconfirm
+  args:
+    chdir: /tmp/yay
+    creates: /usr/bin/yay
+  become: false
+  when: ansible_os_family == 'Archlinux' and yay_installed is failed
+  tags: [yay]
+
+- name: Clean up /tmp/yay build directory
+  ansible.builtin.file:
+    path: /tmp/yay
+    state: absent
+  become: false
+  when: ansible_os_family == 'Archlinux' and yay_installed is failed
+  tags: [yay]

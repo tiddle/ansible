@@ -1,5 +1,5 @@
 ---
-# AIDEV-NOTE: OS-conditional install — Ubuntu uses apt+PPA, macOS uses Homebrew
+# AIDEV-NOTE: OS-conditional install — Ubuntu uses apt+PPA, macOS uses Homebrew, Arch uses pacman
 - name: Ubuntu install
   ansible.builtin.include_tasks: ubuntu.yml
   when: ansible_os_family == "Debian"
@@ -29,4 +29,9 @@
     path: "{{ ansible_env.HOME }}/.zshrc"
     line: "alias vim=nvim"
   when: ansible_os_family == "Darwin" and vim_alias_check_macos.found == 0
+  tags: [nvim]
+
+- name: Arch Linux install
+  ansible.builtin.include_tasks: arch.yml
+  when: ansible_os_family == "Archlinux"
   tags: [nvim]

@@ -1,0 +1,8 @@
+---
+# AIDEV-NOTE: alacritty is available in the Arch official repos via pacman
+- name: Install alacritty
+  become: true
+  community.general.pacman:
+    name: alacritty
+    state: present
+  tags: [alacritty]

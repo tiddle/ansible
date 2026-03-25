@@ -1,11 +1,18 @@
 ---
 # AIDEV-NOTE: Added tags to all tasks
-- name: Get apt packages
+# Added OS-conditional dependency install: fd-find (Debian) vs fd (Arch)
+- name: Install lazyvim dependencies (Debian/Ubuntu)
   become: true
   package:
     name:
       - ripgrep
       - fd-find
+  when: ansible_os_family == 'Debian'
+  tags: [lazyvim]
+
+- name: Install lazyvim dependencies (Arch Linux)
+  import_tasks: arch.yml
+  when: ansible_os_family == 'Archlinux'
   tags: [lazyvim]
 
 - name: Check for lazyvim folder

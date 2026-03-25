@@ -1,0 +1,8 @@
+---
+# AIDEV-NOTE: thefuck is packaged as python-thefuck in the Arch official repos
+- name: Install thefuck
+  become: true
+  community.general.pacman:
+    name: python-thefuck
+    state: present
+  tags: [thefuck]

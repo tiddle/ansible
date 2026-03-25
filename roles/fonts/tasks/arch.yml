@@ -1,0 +1,8 @@
+---
+# AIDEV-NOTE: Hack Nerd Font is available as ttf-hack-nerd in the AUR; install via yay.
+- name: Install ttf-hack-nerd from AUR
+  ansible.builtin.command: yay -S --noconfirm ttf-hack-nerd
+  become: false
+  args:
+    creates: /usr/share/fonts/TTF/HackNerdFont-Regular.ttf
+  tags: [fonts]

@@ -1,0 +1,8 @@
+---
+# AIDEV-NOTE: fzf is available in the Arch official repos via pacman
+- name: Install fzf
+  become: true
+  community.general.pacman:
+    name: fzf
+    state: present
+  tags: [fzf]

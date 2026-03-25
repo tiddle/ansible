@@ -1,0 +1,30 @@
+---
+# AIDEV-NOTE: Arch Linux zsh install via pacman; sets default shell and inits .zshrc same as ubuntu.yml
+- name: Install zsh
+  become: true
+  community.general.pacman:
+    name: zsh
+    state: present
+  tags: [zsh]
+
+- name: Ensure zsh is the default shell
+  become: true
+  user:
+    name: '{{ ansible_user_id }}'
+    shell: /usr/bin/zsh
+    state: present
+  tags: [zsh]
+
+- name: ~/.zshrc exists
+  stat:
+    path: "{{ ansible_env.HOME }}/.zshrc"
+  register: zshrc_exist
+  tags: [zsh]
+
+- name: Init ~/.zshrc
+  become: false
+  when: not zshrc_exist.stat.exists
+  template:
+    src: .zshrc.j2
+    dest: "{{ ansible_env.HOME }}/.zshrc"
+  tags: [zsh]

@@ -1,0 +1,25 @@
+---
+# AIDEV-NOTE: Arch system setup — updates system, installs python tooling, creates workspace dir.
+- name: Update pacman package cache and upgrade system
+  become: true
+  community.general.pacman:
+    update_cache: true
+    upgrade: true
+  tags: [system]
+
+- name: Install system packages
+  become: true
+  community.general.pacman:
+    name:
+      - python
+      - python-pip
+      - python-setuptools
+    state: present
+  tags: [system]
+
+- name: Create ~/Documents/workspace directory
+  become: false
+  ansible.builtin.file:
+    path: "{{ ansible_env.HOME }}/Documents/workspace"
+    state: directory
+  tags: [system]

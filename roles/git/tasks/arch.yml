@@ -1,0 +1,8 @@
+---
+# AIDEV-NOTE: git is available in the Arch official repos via pacman
+- name: Install git
+  become: true
+  community.general.pacman:
+    name: git
+    state: present
+  tags: [git]

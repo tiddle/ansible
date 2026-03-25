@@ -1,0 +1,8 @@
+---
+# AIDEV-NOTE: tmux is available in the Arch official repos via pacman
+- name: Install tmux
+  become: true
+  community.general.pacman:
+    name: tmux
+    state: present
+  tags: [tmux]

@@ -1,0 +1,8 @@
+---
+# AIDEV-NOTE: nvm is not in official Arch repos; install via AUR using yay.
+- name: Install nvm from AUR
+  ansible.builtin.command: yay -S --noconfirm nvm
+  become: false
+  args:
+    creates: /usr/share/nvm/init-nvm.sh
+  tags: [nvm]

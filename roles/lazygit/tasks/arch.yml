@@ -1,0 +1,8 @@
+---
+# AIDEV-NOTE: lazygit is available in the Arch official repos via pacman
+- name: Install lazygit
+  become: true
+  community.general.pacman:
+    name: lazygit
+    state: present
+  tags: [lazygit]

@@ -1,0 +1,14 @@
+---
+# AIDEV-NOTE: On Arch, rustup is installed via pacman; then the stable toolchain is set as default.
+- name: Install rustup
+  become: true
+  community.general.pacman:
+    name: rustup
+    state: present
+  tags: [rust]
+
+- name: Set rustup default toolchain to stable
+  ansible.builtin.command: rustup default stable
+  become: false
+  changed_when: false
+  tags: [rust]

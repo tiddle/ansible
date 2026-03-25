@@ -1,0 +1,8 @@
+---
+# AIDEV-NOTE: zoxide is available in the Arch official repos via pacman
+- name: Install zoxide
+  become: true
+  community.general.pacman:
+    name: zoxide
+    state: present
+  tags: [zoxide]
