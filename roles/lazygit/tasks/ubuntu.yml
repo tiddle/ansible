@@ -1,8 +1,10 @@
 ---
 # AIDEV-NOTE: Added tags to all tasks; shell tasks already use set -o pipefail and executable: /bin/bash
 - name: Check installed version
+  # AIDEV-NOTE: Added set -o pipefail so pipe failures are caught; executable already /bin/bash
   ansible.builtin.shell:
     cmd: |
+      set -o pipefail
       if [[ -f {{ binary_dir }}/lazygit ]]; then
         {{ binary_dir }}/lazygit -v | grep -Po 'version=([0-9.]+)' | cut -d '=' -f 2 2>&1
       else

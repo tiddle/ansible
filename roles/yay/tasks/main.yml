@@ -13,9 +13,11 @@
   tags: [yay]
 
 - name: Check if yay is already installed
+  # AIDEV-NOTE: Replaced ignore_errors: true with failed_when: false + rc check pattern.
+  # failed_when: false keeps the task from failing; downstream tasks use yay_installed.rc != 0.
   ansible.builtin.command: which yay
   register: yay_installed
-  ignore_errors: true
+  failed_when: false
   changed_when: false
   when: ansible_os_family == 'Archlinux'
   tags: [yay]
@@ -26,7 +28,7 @@
     dest: /tmp/yay
     force: true
   become: false
-  when: ansible_os_family == 'Archlinux' and yay_installed is failed
+  when: ansible_os_family == 'Archlinux' and yay_installed.rc != 0
   tags: [yay]
 
 - name: Build and install yay with makepkg
@@ -35,7 +37,7 @@
     chdir: /tmp/yay
     creates: /usr/bin/yay
   become: false
-  when: ansible_os_family == 'Archlinux' and yay_installed is failed
+  when: ansible_os_family == 'Archlinux' and yay_installed.rc != 0
   tags: [yay]
 
 - name: Clean up /tmp/yay build directory
@@ -43,5 +45,5 @@
     path: /tmp/yay
     state: absent
   become: false
-  when: ansible_os_family == 'Archlinux' and yay_installed is failed
+  when: ansible_os_family == 'Archlinux' and yay_installed.rc != 0
   tags: [yay]

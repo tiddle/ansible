@@ -1,7 +1,10 @@
 ---
 # AIDEV-NOTE: Fixed ignore_errors to use ansible_check_mode; added executable arg; added tags
 - name: Check if homebrew is installed
-  shell: command -v brew
+  # AIDEV-NOTE: Updated to use fully-qualified module names per Ansible best practices
+  ansible.builtin.shell:
+    cmd: command -v brew
+    executable: /bin/bash
   register: homebrew_exists
   ignore_errors: "{{ ansible_check_mode }}"
   changed_when: false
@@ -9,7 +12,7 @@
 
 - name: Curl installer
   when: homebrew_exists is failed
-  get_url:
+  ansible.builtin.get_url:
     url: https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh
     dest: /tmp/homebrew.sh
     mode: '0755'
@@ -18,7 +21,7 @@
 
 - name: Install Homebrew
   when: homebrew_exists is failed
-  shell: /tmp/homebrew.sh
-  args:
+  ansible.builtin.shell:
+    cmd: /tmp/homebrew.sh
     executable: /bin/bash
   tags: [homebrew]
