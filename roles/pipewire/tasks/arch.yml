@@ -1,4 +1,11 @@
 ---
+- name: Check if pipewire is already installed
+  ansible.builtin.command: pacman -Q pipewire
+  register: pipewire_installed
+  failed_when: false
+  changed_when: false
+  tags: [pipewire]
+
 - name: Install pipewire packages
   become: true
   community.general.pacman:
@@ -10,6 +17,7 @@
     - pipewire-alsa
     - wireplumber
     - pipewire-jack
+  when: pipewire_installed.rc != 0
   tags: [pipewire]
 
 - name: Enable wireplumber user service
@@ -18,6 +26,7 @@
     scope: user
     enabled: true
     state: started
+  when: pipewire_installed.rc != 0
   tags: [pipewire]
 
 - name: Enable pipewire-pulse user service
@@ -26,4 +35,5 @@
     scope: user
     enabled: true
     state: started
+  when: pipewire_installed.rc != 0
   tags: [pipewire]

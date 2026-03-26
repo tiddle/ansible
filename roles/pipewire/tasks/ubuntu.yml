@@ -1,4 +1,11 @@
 ---
+- name: Check if pipewire is already installed
+  ansible.builtin.command: dpkg -s pipewire
+  register: pipewire_installed
+  failed_when: false
+  changed_when: false
+  tags: [pipewire]
+
 - name: Install pipewire packages
   become: true
   ansible.builtin.apt:
@@ -11,6 +18,7 @@
     - pipewire-alsa
     - wireplumber
     - libspa-0.2-bluetooth
+  when: pipewire_installed.rc != 0
   tags: [pipewire]
 
 - name: Enable wireplumber user service
@@ -19,6 +27,7 @@
     scope: user
     enabled: true
     state: started
+  when: pipewire_installed.rc != 0
   tags: [pipewire]
 
 - name: Enable pipewire-pulse user service
@@ -27,4 +36,5 @@
     scope: user
     enabled: true
     state: started
+  when: pipewire_installed.rc != 0
   tags: [pipewire]

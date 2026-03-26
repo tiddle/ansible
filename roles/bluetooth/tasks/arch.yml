@@ -1,4 +1,11 @@
 ---
+- name: Check if bluetooth is already installed
+  ansible.builtin.command: pacman -Q bluez
+  register: bluetooth_installed
+  failed_when: false
+  changed_when: false
+  tags: [bluetooth]
+
 - name: Install bluetooth packages
   become: true
   community.general.pacman:
@@ -7,6 +14,7 @@
   loop:
     - bluez
     - bluez-utils
+  when: bluetooth_installed.rc != 0
   tags: [bluetooth]
 
 - name: Enable and start bluetooth service
@@ -15,4 +23,5 @@
     name: bluetooth
     enabled: true
     state: started
+  when: bluetooth_installed.rc != 0
   tags: [bluetooth]

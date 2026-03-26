@@ -1,4 +1,11 @@
 ---
+- name: Check if bluetooth is already installed
+  ansible.builtin.command: dpkg -s bluez
+  register: bluetooth_installed
+  failed_when: false
+  changed_when: false
+  tags: [bluetooth]
+
 - name: Install bluetooth packages
   become: true
   ansible.builtin.apt:
@@ -9,6 +16,7 @@
     - bluez
     - bluez-tools
     - bluetooth
+  when: bluetooth_installed.rc != 0
   tags: [bluetooth]
 
 - name: Enable and start bluetooth service
@@ -17,4 +25,5 @@
     name: bluetooth
     enabled: true
     state: started
+  when: bluetooth_installed.rc != 0
   tags: [bluetooth]
