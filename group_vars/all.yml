@@ -1,6 +1,8 @@
 ---
 default_roles:
     - system
+    - pipewire
+    - bluetooth
     - neofetch
     - yay
     - kitty
@@ -25,4 +27,6 @@ default_roles:
     - nvim
     - lazyvim
     - gaming
+    - vlc
+    - mpv
     - tailscale

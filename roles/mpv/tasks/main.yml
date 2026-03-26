@@ -1,0 +1,10 @@
+---
+- name: Include Ubuntu tasks
+  ansible.builtin.include_tasks: ubuntu.yml
+  when: ansible_os_family == "Debian"
+  tags: [mpv]
+
+- name: Include Arch tasks
+  ansible.builtin.include_tasks: arch.yml
+  when: ansible_os_family == "Archlinux"
+  tags: [mpv]

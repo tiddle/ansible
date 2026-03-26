@@ -1,0 +1,20 @@
+---
+- name: Install bluetooth packages
+  become: true
+  ansible.builtin.apt:
+    name: "{{ item }}"
+    state: present
+    update_cache: true
+  loop:
+    - bluez
+    - bluez-tools
+    - bluetooth
+  tags: [bluetooth]
+
+- name: Enable and start bluetooth service
+  become: true
+  ansible.builtin.systemd:
+    name: bluetooth
+    enabled: true
+    state: started
+  tags: [bluetooth]

@@ -1,0 +1,8 @@
+---
+- name: Install mpv
+  become: true
+  ansible.builtin.apt:
+    name: mpv
+    state: present
+    update_cache: true
+  tags: [mpv]

@@ -1,0 +1,7 @@
+---
+- name: Install vlc
+  become: true
+  community.general.pacman:
+    name: vlc
+    state: present
+  tags: [vlc]

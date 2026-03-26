@@ -1,0 +1,29 @@
+---
+- name: Install pipewire packages
+  become: true
+  community.general.pacman:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - pipewire
+    - pipewire-pulse
+    - pipewire-alsa
+    - wireplumber
+    - pipewire-jack
+  tags: [pipewire]
+
+- name: Enable wireplumber user service
+  ansible.builtin.systemd:
+    name: wireplumber
+    scope: user
+    enabled: true
+    state: started
+  tags: [pipewire]
+
+- name: Enable pipewire-pulse user service
+  ansible.builtin.systemd:
+    name: pipewire-pulse
+    scope: user
+    enabled: true
+    state: started
+  tags: [pipewire]

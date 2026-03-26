@@ -1,0 +1,30 @@
+---
+- name: Install pipewire packages
+  become: true
+  ansible.builtin.apt:
+    name: "{{ item }}"
+    state: present
+    update_cache: true
+  loop:
+    - pipewire
+    - pipewire-pulse
+    - pipewire-alsa
+    - wireplumber
+    - libspa-0.2-bluetooth
+  tags: [pipewire]
+
+- name: Enable wireplumber user service
+  ansible.builtin.systemd:
+    name: wireplumber
+    scope: user
+    enabled: true
+    state: started
+  tags: [pipewire]
+
+- name: Enable pipewire-pulse user service
+  ansible.builtin.systemd:
+    name: pipewire-pulse
+    scope: user
+    enabled: true
+    state: started
+  tags: [pipewire]

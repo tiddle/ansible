@@ -1,0 +1,7 @@
+---
+- name: Install mpv
+  become: true
+  community.general.pacman:
+    name: mpv
+    state: present
+  tags: [mpv]
